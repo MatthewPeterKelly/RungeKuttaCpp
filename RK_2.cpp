@@ -1,6 +1,8 @@
 #include <iostream>
 #include "RK_2.h"
 
+#include "integrator.h"
+
 using namespace std;
 
 /* 4th-Order Explicit "Classical" Runge-Kutta Method */

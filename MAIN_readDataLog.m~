@@ -22,21 +22,22 @@ plot(t,w,'ro');
 tSpan = t([1,end]);
 z0 = [q(1); w(1)];
 
-% Test systems
-simplePendulum = @(t,z)( [z(2,:);  - 0.1*z(2,:) - sin(z(1,:))] );
-drivenDampedPendulum = @(t,z)( [z(2,:);  cos(t) - 0.1*z(2,:) - sin(z(1,:))] );
-
-% Select dynamics:
-dynFun = simplePendulum;
+% Dynamical system - driven damped pendulum
+dynSys = @(t,z)( [z(2,:);  cos(t) - 0.1*z(2,:) - sin(z(1,:))] );
 
 % simulate:
-options = odeset(...
-    'RelTol',1e-12, 'AbsTol', 1e-12);
-soln = ode45(dynFun,tSpan,z0,options);
+if exist('soln','var')
+    newInput = [tSpan';z0];
+    oldInput = [soln.x([1;end]);qSoln(1);wSoln(1)];
+    if any(newInput~=oldInput)
+    options = odeset(...
+    'RelTol',1e-12, 'AbsTol', 1e-12, 'MaxStep',1e-3);
+soln = ode45(dynSys,tSpan,z0,options);
 zSoln = deval(soln,t);
 qSoln = zSoln(1,:);
 wSoln = zSoln(2,:);
-
+    end
+end
 subplot(2,1,1); hold on;
 plot(t,qSoln);
 

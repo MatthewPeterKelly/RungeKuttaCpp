@@ -8,7 +8,9 @@ using namespace std;
 #include "RK_2.h"
 #include "RK_4A.h"
 #include "RK_4B.h"
+#include "RK_45.h"
 #include "RK_5.h"
+#include "RK_10.h"
 
 
 /******************************************************************************
@@ -248,8 +250,12 @@ void simulate(DynFun dynFun, double t0, double t1, double z0[], double z1[],
 			rk4Astep(dynFun, tLow, tUpp, zLow, zUpp, nDim); break;
 		case RK_4B:
 			rk4Bstep(dynFun, tLow, tUpp, zLow, zUpp, nDim); break;
+		case RK_45:
+			rk45step(dynFun, tLow, tUpp, zLow, zUpp, nDim); break;
 		case RK_5:
 			rk5step(dynFun, tLow, tUpp, zLow, zUpp, nDim); break;
+		case RK_10:
+			rk10step(dynFun, tLow, tUpp, zLow, zUpp, nDim); break;
 		}
 
 		/// Print the state of the simulation:
