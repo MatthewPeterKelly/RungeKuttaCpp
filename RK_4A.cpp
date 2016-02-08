@@ -32,7 +32,6 @@ static const int nStage = 4;
 
 /* Actual integration step happens here */
 void rk4Astep(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUpp[], int nDim) {
-
 	double dt = tUpp - tLow;
 	printf("\n\ndt = %4.4f   tLow = %4.4f    tUpp = %4.4f \n", dt, tLow, tUpp);
 
@@ -72,7 +71,7 @@ void rk4Astep(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUp
 				if (iDim == 0) printf("  %4.4f", B[iStage][j]);
 			}
 			if (iDim == 0) printf("\n");
-			z[iStage][iDim] = z[iStage - 1][iDim] + dt * sum;
+			z[iStage][iDim] = zLow[iDim] + dt * sum;
 		}
 		dynFun(t[iStage], z[iStage], f[iStage]);
 	}
@@ -90,6 +89,12 @@ void rk4Astep(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUp
 	printf("C: ");
 	for (int iStage = 0; iStage < nStage; iStage++) {
 		printf("%4.4f    ", C[iStage]);
+	}	
+	for (int iDim = 0; iDim < nDim; iDim++) {
+		printf("\nz[%d]:  ", iDim);
+		for (int iStage = 0; iStage < nStage; iStage++) {
+			printf("%4.4f    ", z[iStage][iDim]);
+		}
 	}
 	for (int iDim = 0; iDim < nDim; iDim++) {
 		printf("\nf[%d]:  ", iDim);

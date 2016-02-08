@@ -6,7 +6,7 @@ using namespace std;
 /* 4th-Order Explicit "Classical" Runge-Kutta Method */
 
 /* Time-step coefficients */
-static double A[] = {0.0, 1.0};
+static double A[] = {0.0, 0.5};
 
 /* Solution weighting coefficients */
 static double C[] = {0.0, 1.0};
@@ -20,8 +20,7 @@ static const int nStage = 2;
 
 /* Actual integration step happens here */
 void rk2step(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUpp[], int nDim) {
-
-	double dt = tUpp - tLow;
+double dt = tUpp - tLow;
 	printf("\n\ndt = %4.4f   tLow = %4.4f    tUpp = %4.4f \n", dt, tLow, tUpp);
 
 	/// Allocate memory:
@@ -60,7 +59,7 @@ void rk2step(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUpp
 				if (iDim == 0) printf("  %4.4f", B[iStage][j]);
 			}
 			if (iDim == 0) printf("\n");
-			z[iStage][iDim] = z[iStage - 1][iDim] + dt * sum;
+			z[iStage][iDim] = zLow[iDim] + dt * sum;
 		}
 		dynFun(t[iStage], z[iStage], f[iStage]);
 	}
@@ -78,6 +77,12 @@ void rk2step(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUpp
 	printf("C: ");
 	for (int iStage = 0; iStage < nStage; iStage++) {
 		printf("%4.4f    ", C[iStage]);
+	}	
+	for (int iDim = 0; iDim < nDim; iDim++) {
+		printf("\nz[%d]:  ", iDim);
+		for (int iStage = 0; iStage < nStage; iStage++) {
+			printf("%4.4f    ", z[iStage][iDim]);
+		}
 	}
 	for (int iDim = 0; iDim < nDim; iDim++) {
 		printf("\nf[%d]:  ", iDim);

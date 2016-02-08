@@ -66,9 +66,8 @@ static const int nStage = 6;
 
 /* Actual integration step happens here */
 void rk5step(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUpp[], int nDim) {
-
-	double dt = tUpp - tLow;
-	// printf("\n\ndt = %4.4f   tLow = %4.4f    tUpp = %4.4f \n", dt, tLow, tUpp);
+double dt = tUpp - tLow;
+	printf("\n\ndt = %4.4f   tLow = %4.4f    tUpp = %4.4f \n", dt, tLow, tUpp);
 
 	/// Allocate memory:
 	double t[nStage];
@@ -98,15 +97,15 @@ void rk5step(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUpp
 	/// March through each stage:
 	double sum;
 	for (int iStage = 1; iStage < nStage; iStage++) {
-		// printf("t = %4.4f \nB[%d]:", t[iStage], iStage);
+		printf("t = %4.4f \nB[%d]:", t[iStage], iStage);
 		for (int iDim = 0; iDim < nDim; iDim++) {
 			sum = 0.0;
 			for (int j = 0; j < iStage; j++) {
 				sum = sum + B[iStage][j] * f[iStage - 1][iDim];
-				// if (iDim == 0) printf("  %4.4f", B[iStage][j]);
+				if (iDim == 0) printf("  %4.4f", B[iStage][j]);
 			}
-			// if (iDim == 0) printf("\n");
-			z[iStage][iDim] = z[iStage - 1][iDim] + dt * sum;
+			if (iDim == 0) printf("\n");
+			z[iStage][iDim] = zLow[iDim] + dt * sum;
 		}
 		dynFun(t[iStage], z[iStage], f[iStage]);
 	}
@@ -120,26 +119,32 @@ void rk5step(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUpp
 		zUpp[iDim] = zLow[iDim] + dt * sum;
 	}
 
-	// /// Debugging:
-	// printf("C: ");
-	// for (int iStage = 0; iStage < nStage; iStage++) {
-	// 	printf("%4.4f    ", C[iStage]);
-	// }
-	// for (int iDim = 0; iDim < nDim; iDim++) {
-	// 	printf("\nf[%d]:  ", iDim);
-	// 	for (int iStage = 0; iStage < nStage; iStage++) {
-	// 		printf("%4.4f    ", f[iStage][iDim]);
-	// 	}
-	// }
-	// printf("\nzLow: ");
-	// for (int iDim = 0; iDim < nDim; iDim++) {
-	// 	printf("%4.4f    ", zLow[iDim]);
-	// }
-	// printf("\nzUpp: ");
-	// for (int iDim = 0; iDim < nDim; iDim++) {
-	// 	printf("%4.4f    ", zUpp[iDim]);
-	// }
-	// printf("\n");
+	/// Debugging:
+	printf("C: ");
+	for (int iStage = 0; iStage < nStage; iStage++) {
+		printf("%4.4f    ", C[iStage]);
+	}	
+	for (int iDim = 0; iDim < nDim; iDim++) {
+		printf("\nz[%d]:  ", iDim);
+		for (int iStage = 0; iStage < nStage; iStage++) {
+			printf("%4.4f    ", z[iStage][iDim]);
+		}
+	}
+	for (int iDim = 0; iDim < nDim; iDim++) {
+		printf("\nf[%d]:  ", iDim);
+		for (int iStage = 0; iStage < nStage; iStage++) {
+			printf("%4.4f    ", f[iStage][iDim]);
+		}
+	}
+	printf("\nzLow: ");
+	for (int iDim = 0; iDim < nDim; iDim++) {
+		printf("%4.4f    ", zLow[iDim]);
+	}
+	printf("\nzUpp: ");
+	for (int iDim = 0; iDim < nDim; iDim++) {
+		printf("%4.4f    ", zUpp[iDim]);
+	}
+	printf("\n");
 
 	/// Release memory:
 	for (int i = 0; i < nStage; i++) {

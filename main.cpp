@@ -38,8 +38,8 @@ int main()
 	// IntegrationMethod method = Euler;      	// 1st-order method
 	// IntegrationMethod method = MidPoint;  	// 2nd-order method
 	// IntegrationMethod method = RungeKutta;  // Classical 4th-order Runge-Kutta
-	IntegrationMethod method = RK_2;  		// 2nd-order Runge-Kutta (MidPoint Method)
-	// IntegrationMethod method = RK_4A;  		// Classical 4th-order Runge-Kutta
+	// IntegrationMethod method = RK_2;  		// 2nd-order Runge-Kutta (MidPoint Method)
+	IntegrationMethod method = RK_4A;  		// Classical 4th-order Runge-Kutta
 	// IntegrationMethod method = RK_5;  		// 5th-order Runge-Kutta
 
 	simulate(dynFun, t0, t1, z0, z1, nDim, nStep, method);
