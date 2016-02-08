@@ -36,7 +36,12 @@ static double RK45__B[] = {
 
 static const int RK45__nStage = 6;
 
-/* Actual integration step happens here */
+/* Runge-Kutta-Fehlberg Integration method
+ * tLow = time at beginning of the step
+ * tUpp = time at the end of the step
+ * zLow = state at the beginning of the step
+ * zUpp = state at the end of the step (unknown  --  Computed by this function)
+ * nDim = dimension of the state space*/
 void rk45step(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUpp[], int nDim) {
 	RK_STEP( dynFun,
 	         tLow,  tUpp,  zLow,  zUpp,  nDim,

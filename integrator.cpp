@@ -17,6 +17,7 @@ using namespace std;
  *                           Utility Functions                                *
  ******************************************************************************/
 
+/* Prints the current time and state to the log file */
 void printState(std::ofstream& file, double t, double z[], int nDim) {
 	file << t ;
 	for (int j = 0; j < nDim; j++) {
@@ -80,7 +81,7 @@ void midPointStep(DynFun dynFun, double tLow, double tUpp, double zLow[], double
 }
 
 
-/* Time step using 4th-order Runge Kutta */
+/* Time step using 4th-order "Classical" Runge Kutta */
 void rungeKuttaStep(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUpp[], int nDim) {
 
 	double dt = tUpp - tLow;
@@ -140,7 +141,18 @@ void rungeKuttaStep(DynFun dynFun, double tLow, double tUpp, double zLow[], doub
  ******************************************************************************/
 
 
-/* Actual integration step happens here */
+/* General-Purpose Runge--Kutta integration step, using a Butcher table.
+ * tLow = time at beginning of the step
+ * tUpp = time at the end of the step
+ * zLow = state at the beginning of the step
+ * zUpp = state at the end of the step (unknown  --  Computed by this function)
+ * nDim = dimension of the state space
+  * A[] gives the time coefficients for the method
+ * B[] gives the state propagation coefficients (assume lower triangular matrix)
+ * C[] gives the solution coefficients for the method
+ * nStage = number of stages in the Runge--Kutta method
+ * Look at the example code to understand formatting for these inputs.
+ */
 void RK_STEP(DynFun dynFun,
              double tLow, double tUpp, double zLow[], double zUpp[], int nDim,
              double A[], double B[], double C[], int nStage)

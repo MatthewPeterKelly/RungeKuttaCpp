@@ -4,7 +4,9 @@
 
 using namespace std;
 
-/* 4th-Order Explicit "3/8 Rule" Runge-Kutta Method */
+/* 4th-Order Explicit "3/8 Rule" Runge-Kutta Method 
+ * https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods
+ */
 
 /* Time-step coefficients */
 static double RK4B__A[] = {
@@ -31,7 +33,12 @@ static double RK4B__B[] = {
 
 static const int RK4B__nStage = 4;
 
-/* Actual integration step happens here */
+/* Runge-Kutta "3/8 Rule"
+ * tLow = time at beginning of the step
+ * tUpp = time at the end of the step
+ * zLow = state at the beginning of the step
+ * zUpp = state at the end of the step (unknown  --  Computed by this function)
+ * nDim = dimension of the state space*/
 void rk4Bstep(DynFun dynFun,
               double tLow, double tUpp, double zLow[], double zUpp[], int nDim)
 {

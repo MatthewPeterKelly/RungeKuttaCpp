@@ -7,7 +7,7 @@ using namespace std;
 #include "integrator.h"
 
 
-/* Test dynamics function 0*/
+/* Test dynamics function --  simple pendulum*/
 void simplePendulum(double t, double z[], double dz[]) {
 	double x = z[0];
 	double v = z[1];
@@ -18,7 +18,7 @@ void simplePendulum(double t, double z[], double dz[]) {
 }
 
 
-/* Test dynamics function 1*/
+/* Test dynamics function -- driven damped pendulum*/
 void drivenDampedPendulum(double t, double z[], double dz[]) {
 	double x = z[0];
 	double v = z[1];

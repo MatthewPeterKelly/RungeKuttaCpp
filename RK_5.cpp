@@ -42,8 +42,13 @@ static double RK5__B[] = {
 
 static const int RK5__nStage = 6;
 
-/* Actual integration step happens here */
-void rk5step(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUpp[], int nDim) {
+/* Runge-Kutta 5th-order method
+ * tLow = time at beginning of the step
+ * tUpp = time at the end of the step
+ * zLow = state at the beginning of the step
+ * zUpp = state at the end of the step (unknown  --  Computed by this function)
+ * nDim = dimension of the state space*/
+ void rk5step(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUpp[], int nDim) {
 	RK_STEP( dynFun,
 	         tLow,  tUpp,  zLow,  zUpp,  nDim,
 	         RK5__A,  RK5__B,  RK5__C,  RK5__nStage);

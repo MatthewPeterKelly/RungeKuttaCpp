@@ -4,3 +4,6 @@
 # Data:
 **/*.csv
 
+# Matlab autosave:
+**/*.m~
+**/*.asv
