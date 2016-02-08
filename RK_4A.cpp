@@ -1,5 +1,6 @@
 #include <iostream>
 #include "RK_4A.h"
+#include "integrator.h"
 
 using namespace std;
 
@@ -22,19 +23,19 @@ static double C[] = {
 };
 
 /* Simulation weighting coefficients */
-static double B0[] = {0.0, 0.0, 0.0, 0.0};
-static double B1[] = {0.5, 0.0, 0.0, 0.0};
-static double B2[] = {0.0, 0.5, 0.0, 0.0};
-static double B3[] = {0.0, 0.0, 1.0, 0.0};
-static double *B[] = {B0, B1, B2, B3};
+static double B[] = {
+	0.5,
+	0.0, 0.5,
+	0.0, 0.0, 1.0
+};
 
 static const int nStage = 4;
 
 /* Actual integration step happens here */
-void rk4Astep(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUpp[], int nDim) {
-	double dt = tUpp - tLow;
-	printf("\n\ndt = %4.4f   tLow = %4.4f    tUpp = %4.4f \n", dt, tLow, tUpp);
-
+void rk4Astep(DynFun dynFun, 
+	double tLow, double tUpp, double zLow[], double zUpp[], int nDim) 
+{
+	
 	/// Allocate memory:
 	double t[nStage];
 	double** z = new double*[nStage];
@@ -47,6 +48,7 @@ void rk4Astep(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUp
 	}
 
 	/// Populate time grid:
+	double dt = tUpp - tLow;
 	for (int iStage = 0; iStage < nStage; iStage++) {
 		t[iStage] = tLow + dt * A[iStage];
 	}
@@ -62,15 +64,14 @@ void rk4Astep(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUp
 
 	/// March through each stage:
 	double sum;
+	int idx;
 	for (int iStage = 1; iStage < nStage; iStage++) {
-		printf("t = %4.4f \nB[%d]:", t[iStage], iStage);
 		for (int iDim = 0; iDim < nDim; iDim++) {
 			sum = 0.0;
 			for (int j = 0; j < iStage; j++) {
-				sum = sum + B[iStage][j] * f[iStage - 1][iDim];
-				if (iDim == 0) printf("  %4.4f", B[iStage][j]);
+				idx = iStage*(iStage-1)/2 + j;   // Triangle numbers   
+				sum = sum + B[idx]*f[iStage - 1][iDim];
 			}
-			if (iDim == 0) printf("\n");
 			z[iStage][iDim] = zLow[iDim] + dt * sum;
 		}
 		dynFun(t[iStage], z[iStage], f[iStage]);
@@ -84,33 +85,6 @@ void rk4Astep(DynFun dynFun, double tLow, double tUpp, double zLow[], double zUp
 		}
 		zUpp[iDim] = zLow[iDim] + dt * sum;
 	}
-
-	/// Debugging:
-	printf("C: ");
-	for (int iStage = 0; iStage < nStage; iStage++) {
-		printf("%4.4f    ", C[iStage]);
-	}	
-	for (int iDim = 0; iDim < nDim; iDim++) {
-		printf("\nz[%d]:  ", iDim);
-		for (int iStage = 0; iStage < nStage; iStage++) {
-			printf("%4.4f    ", z[iStage][iDim]);
-		}
-	}
-	for (int iDim = 0; iDim < nDim; iDim++) {
-		printf("\nf[%d]:  ", iDim);
-		for (int iStage = 0; iStage < nStage; iStage++) {
-			printf("%4.4f    ", f[iStage][iDim]);
-		}
-	}
-	printf("\nzLow: ");
-	for (int iDim = 0; iDim < nDim; iDim++) {
-		printf("%4.4f    ", zLow[iDim]);
-	}
-	printf("\nzUpp: ");
-	for (int iDim = 0; iDim < nDim; iDim++) {
-		printf("%4.4f    ", zUpp[iDim]);
-	}
-	printf("\n");
 
 	/// Release memory:
 	for (int i = 0; i < nStage; i++) {

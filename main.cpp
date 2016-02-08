@@ -24,11 +24,11 @@ void dynamicsFunction(double t, double z[], double dz[]) {
 int main()
 {
 	double t0 = 0.0;
-	double t1 = 0.8;  ////hack //// 10*(2.0*M_PI);
+	double t1 = 10*(2.0*M_PI);
 	double z0[2];
 	double z1[2];
 	int nDim = 2;
-	double dt = 0.2;
+	double dt = 0.1;
 	int nStep = ceil((t1-t0)/dt);
 	DynFun dynFun = dynamicsFunction;
 

@@ -10,6 +10,10 @@ using namespace std;
 #include "RK_5.h"
 
 
+/******************************************************************************
+ *                           Utility Functions                                *
+ ******************************************************************************/
+
 void printState(std::ofstream& file, double t, double z[], int nDim) {
 	file << t ;
 	for (int j = 0; j < nDim; j++) {
@@ -18,6 +22,10 @@ void printState(std::ofstream& file, double t, double z[], int nDim) {
 	file << "\n";
 }
 
+
+/******************************************************************************
+ *                     Hard-Coded Low-Order Methods                           *
+ ******************************************************************************/
 
 /* Takes a simple euler step for the system */
 void eulerStep(DynFun dynFun, double t0, double t1, double z0[], double z1[], int nDim) {
@@ -122,6 +130,84 @@ void rungeKuttaStep(DynFun dynFun, double tLow, double tUpp, double zLow[], doub
 
 }
 
+
+
+/******************************************************************************
+ *                      General-Form Runge-Kutta Step                         *
+ ******************************************************************************/
+
+
+// /* Actual integration step happens here */
+// void RK_STEP(DynFun dynFun,
+//              double tLow, double tUpp, double zLow[], double zUpp[], int nDim,
+//              double A[], double B[][], double C[], int nStage)
+// {
+
+// 	/// Allocate memory:
+// 	double t[nStage];
+// 	double** z = new double*[nStage];
+// 	for (int i = 0; i < nStage; i++) {
+// 		z[i] = new double[nDim];
+// 	}
+// 	double** f = new double*[nStage];
+// 	for (int i = 0; i < nStage; i++) {
+// 		f[i] = new double[nDim];
+// 	}
+
+// 	/// Populate time grid:
+// 	double dt = tUpp - tLow;
+// 	for (int iStage = 0; iStage < nStage; iStage++) {
+// 		t[iStage] = tLow + dt * A[iStage];
+// 	}
+
+// 	/// Initial State:
+// 	int iStage = 0;
+// 	for (int iDim = 0; iDim < nDim; iDim++) {
+// 		z[iStage][iDim] = zLow[iDim];
+// 	}
+
+// 	/// Dynamics at initial point:
+// 	dynFun(t[0], z[0], f[0]);
+
+// 	/// March through each stage:
+// 	double sum;
+// 	for (int iStage = 1; iStage < nStage; iStage++) {
+// 		for (int iDim = 0; iDim < nDim; iDim++) {
+// 			sum = 0.0;
+// 			for (int j = 0; j < iStage; j++) {
+// 				sum = sum + B[iStage][j] * f[iStage - 1][iDim];
+// 			}
+// 			z[iStage][iDim] = zLow[iDim] + dt * sum;
+// 		}
+// 		dynFun(t[iStage], z[iStage], f[iStage]);
+// 	}
+
+// 	/// Compute the final estimate:
+// 	for (int iDim = 0; iDim < nDim; iDim++) {
+// 		sum = 0.0;
+// 		for (int iStage = 0; iStage < nStage; iStage++) {
+// 			sum = sum + C[iStage] * f[iStage][iDim];
+// 		}
+// 		zUpp[iDim] = zLow[iDim] + dt * sum;
+// 	}
+
+// 	/// Release memory:
+// 	for (int i = 0; i < nStage; i++) {
+// 		delete [] z[i];
+// 	}
+// 	delete [] z;
+// 	for (int i = 0; i < nStage; i++) {
+// 		delete [] f[i];
+// 	}
+// 	delete [] f;
+// }
+
+
+
+
+/******************************************************************************
+ *                      Simulation Wrapper Function                           *
+ ******************************************************************************/
 
 /* Runs several time steps using euler integration */
 void simulate(DynFun dynFun, double t0, double t1, double z0[], double z1[],
