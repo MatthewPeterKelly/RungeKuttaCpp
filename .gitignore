@@ -1,0 +1,6 @@
+# Executables:
+**/*.out
+
+# Data:
+**/*.csv
+
