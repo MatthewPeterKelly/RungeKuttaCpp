@@ -7,7 +7,9 @@ enum IntegrationMethod {
 	Euler,
 	MidPoint,
 	RungeKutta,
-	RK8
+	RK_2,
+	RK_4A,
+	RK_5
 };
 
 void simulate(DynFun dynFun,double t0, double t1, 

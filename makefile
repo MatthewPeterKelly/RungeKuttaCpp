@@ -5,7 +5,7 @@ CC=g++
 C_FLAGS=-Wall -std=c++11
 
 # Source files:
-SRC=integrator.cpp main.cpp 
+SRC=RK_2.cpp RK_4A.cpp RK_5.cpp integrator.cpp main.cpp 
 
 all:
 	$(CC) $(SRC) $(C_FLAGS) -o main.out

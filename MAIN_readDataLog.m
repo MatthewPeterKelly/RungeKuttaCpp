@@ -12,10 +12,10 @@ w = DATA(:,3);
 figure(1); clf;
 
 subplot(2,1,1);
-plot(t,q);
+plot(t,q,'ro');
 
 subplot(2,1,2);
-plot(t,w);
+plot(t,w,'ro');
 
 
 %%%% Now check using ode45:
